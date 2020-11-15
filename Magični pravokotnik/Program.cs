@@ -4,50 +4,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//OPTIMIZACIJA
+//algoritem lahko napišemo tudi brez uporabe polj (polja so lahko potratna)
+//stevilka, ki jo dobis kot ostanek vrednosti pri deljenju s 10 - tako da lahko tam namestno if uporabis kar a % 10 -> odpade ena spremenjivka in pogoj
+//spremenljivke - bolj opisljive (ne samo i, j in vnos)
+
 namespace Magični_pravokotnik
 {
     class Program
     {
         static void NapolniPolje(int[,] polje)
         {
-            //najprej napolnimo vsako vrstico od 1 - stevilo            
-            for (int i = 0; i < polje.GetLength(0); i++)
+            //oblikujemo magični pravokotnik
+            for (int vrstica = 0; vrstica < polje.GetLength(0); vrstica++)
             {
-                int stevilo = 1; //vsako vrstica se začne z 1                
-
-                for (int j = 0; j < polje.GetLength(1); j++)
+                for (int stolpec = 0; stolpec < polje.GetLength(0); stolpec++)
                 {
-                    if (stevilo > 9) //ko število preseže 9, ponovno začnemo z nič
-                        stevilo = 0;
-
-                    polje[i, j] = stevilo;
-                    stevilo++;
+                    if (vrstica > stolpec)
+                        polje[vrstica, stolpec] = (vrstica + 1) % 10;
+                    else
+                        polje[vrstica, stolpec] = (stolpec + 1) % 10;
                 }
-            }
-            
-            //nato oblikujemo magični pravokotnik
-            int st_obl = 0; //koliko je drugačnih v trenutni vrsti glede na prejšnjo
-
-            int dodatek = 0;
-            
-            for (int i = 0; i < polje.GetLength(0); i++)
-            {
-                dodatek = polje[i,i]; //diagonala
-                for (int j = 0; j < st_obl; j++)
-                {
-                    polje[i, j] = dodatek;
-                }
-                st_obl++;                
             }
         }
 
         static void Izris(int[,] polje)
         {
-            for (int i = 0; i < polje.GetLength(0); i++)
+            NapolniPolje(polje);
+            for (int vrstica = 0; vrstica < polje.GetLength(0); vrstica++)
             {
-                for (int j = 0; j < polje.GetLength(1); j++)
+                for (int stolpec = 0; stolpec < polje.GetLength(1); stolpec++)
                 {
-                    Console.Write(polje[i, j] + " ");
+                    Console.Write(polje[vrstica, stolpec] + " ");
                 }
                 Console.WriteLine();
             }
@@ -55,31 +43,30 @@ namespace Magični_pravokotnik
 
         static void Main(string[] args)
         {
-            int vnos = -1;
+            int velikostLika = -1;
             do
             {
                 try
                 {
-                    Console.Write("Vpiši število med 1 in 40: ");
-                    vnos = int.Parse(Console.ReadLine());
+                    Console.Write("Vpiši velikost med 1 in 40: ");
+                    velikostLika = int.Parse(Console.ReadLine());
                 }
                 catch
                 {
                     Console.WriteLine("Napaka.");
                 }
 
-                if (vnos >= 1 && vnos <= 40)
+                if (velikostLika >= 1 && velikostLika <= 40)
                 {
-                    int[,] p = new int[vnos, vnos]; //velikost polja je vnešeno število na kvadrat
-                    NapolniPolje(p);
+                    int[,] p = new int[velikostLika, velikostLika];
                     Izris(p);
                 }
-                else if (vnos == 0)
+                else if (velikostLika == 0)
                     Console.WriteLine("Konec programa.");
                 else
                     Console.WriteLine("Vrednost vnosa ni v obsegu parametrov. Zahtevan je ponovni vnos ali vpis 0 za izhod.");
                 Console.WriteLine();
-            } while ((vnos < 1 || vnos > 40) && vnos != 0);
+            } while ((velikostLika < 1 || velikostLika > 40) && velikostLika != 0);
 
             Console.ReadKey(true);
         }
